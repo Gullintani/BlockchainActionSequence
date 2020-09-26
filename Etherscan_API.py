@@ -63,7 +63,7 @@ def collect_transaction(address:str, path:str):
         df['tokenDecimal'] = 'NA'
         df['type'] = 'external'
         df.to_csv(path + address + '.csv')
-        print("External Saved")
+        # print("External Saved")
     else:
         print("get external transaction failed: " + result)
 
@@ -74,7 +74,7 @@ def collect_transaction(address:str, path:str):
         df = df[erc20_select]
         df['type'] = 'ERC20'
         df.to_csv(path + address + '.csv', mode='a', header=False)
-        print("ERC20 Saved")
+        # print("ERC20 Saved")
     else:
         print("get ERC20 transaction failed: " + result)
 
@@ -85,7 +85,7 @@ def collect_transaction(address:str, path:str):
         df = df[erc721_select]
         df['type'] = 'ERC721'
         df.to_csv(path + address + '.csv', mode='a', header=False)
-        print("ERC721 Saved")
+        # print("ERC721 Saved")
     else:
         print("get ERC721 transaction failed: " + result)
 
@@ -110,8 +110,16 @@ if __name__ == '__main__':
     api_key = '39M8BBF53U6M7N2YS92M163RP3RCZF6GUK'
 
     # ======================= Start Program =======================
-    address = '0x7891f796a5d43466fc29f102069092aef497a290'
+    # address = '0x7891f796a5d43466fc29f102069092aef497a290'
     path = './data/by_address_raw/'
-    collect_transaction(address, path)
-
-    
+    with open('./larger_1000.txt', 'r') as f:
+        address_list = eval(f.read())[3089:]
+    total = len(address_list)
+    index = 0
+    for address in address_list:
+        try:
+            collect_transaction(address, path)
+            print(f"collected {index}/{total}.")
+            index += 1
+        except:
+            continue
