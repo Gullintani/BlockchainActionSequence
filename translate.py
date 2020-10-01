@@ -25,7 +25,7 @@ def match(row, self_address):
             return_list = ['unknown', to_title, 'unknown', to_cate]
 
     else:
-        return_list = [row[3], row[4], 'unknown', 'unknown']
+        return_list = ['unknown', 'unknown', 'unknown', 'unknown']
 
     try:
         contract_title, contract_cate = tuple(translate_df.query("address == @row[8]")[['title', 'category']].values[0])
@@ -33,13 +33,13 @@ def match(row, self_address):
         return_list.append(contract_cate)
         return pd.Series(return_list)
     except:
-        return_list.append('NA')
-        return_list.append('NA')
+        return_list.append('unknown')
+        return_list.append('unknown')
         return pd.Series(return_list)
 
 def translate(input_path:str, output_path:str, self_address:str):
     df = pd.read_csv(input_path)
-    df = df.fillna('NA')
+    df = df.fillna('unknown')
     df[['from_title', 'to_title', 'from_cate', 'to_cate', 'contract_title', 'contract_cate']]= df.apply(lambda row: match(row, self_address), axis=1)
     df.to_csv(output_path)
     return
